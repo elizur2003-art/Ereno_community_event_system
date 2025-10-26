@@ -6,13 +6,13 @@ import (
 	"log"
 	"os"
 
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 var DB *sql.DB
 
+// Load environment variables (works locally and on Render)
 func LoadEnv() {
 	err := godotenv.Load()
 	if err != nil {
@@ -20,65 +20,65 @@ func LoadEnv() {
 	}
 }
 
+// Initialize PostgreSQL database connection
 func InitDB() {
 	var err error
 
-	dbUser := os.Getenv("DB_USER")
-	dbPass := os.Getenv("DB_PASS")
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	dbName := os.Getenv("DB_NAME")
+	// Get full PostgreSQL connection string from Render
+	dbURL := os.Getenv("DATABASE_URL")
+	if dbURL == "" {
+		log.Fatal("❌ DATABASE_URL environment variable not set")
+	}
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
-		dbUser, dbPass, dbHost, dbPort, dbName,
-	)
-
-	DB, err = sql.Open("mysql", dsn)
+	// Connect to PostgreSQL using the connection URL
+	DB, err = sql.Open("postgres", dbURL)
 	if err != nil {
-		log.Fatal("Error connecting to database:", err)
+		log.Fatal("❌ Failed to connect to PostgreSQL:", err)
 	}
 
+	// Test the database connection
 	if err = DB.Ping(); err != nil {
-		log.Fatal("Database unreachable:", err)
+		log.Fatal("❌ Database unreachable:", err)
 	}
 
+	fmt.Println("✅ PostgreSQL database connected successfully")
 	createTables()
-	fmt.Println("✅ Database connected successfully")
 }
 
+// Create tables if they don’t exist
 func createTables() {
 	tables := []string{
 		`CREATE TABLE IF NOT EXISTS events (
-			id INT AUTO_INCREMENT PRIMARY KEY,
-			name VARCHAR(255),
-			date VARCHAR(255),
-			time VARCHAR(255),
-			venue VARCHAR(255),
+			id SERIAL PRIMARY KEY,
+			name TEXT,
+			date TEXT,
+			time TEXT,
+			venue TEXT,
 			description TEXT
 		);`,
 
 		`CREATE TABLE IF NOT EXISTS attendees (
-			id INT AUTO_INCREMENT PRIMARY KEY,
-			name VARCHAR(255),
-			email VARCHAR(255),
-			event_id INT,
-			FOREIGN KEY (event_id) REFERENCES events(id)
+			id SERIAL PRIMARY KEY,
+			name TEXT,
+			email TEXT,
+			event_id INTEGER REFERENCES events(id)
 		);`,
 
 		`CREATE TABLE IF NOT EXISTS feedback (
-			id INT AUTO_INCREMENT PRIMARY KEY,
-			event_id INT,
-			name VARCHAR(255),
+			id SERIAL PRIMARY KEY,
+			event_id INTEGER REFERENCES events(id),
+			name TEXT,
 			comment TEXT,
-			rating INT,
-			FOREIGN KEY (event_id) REFERENCES events(id)
+			rating INTEGER
 		);`,
 	}
 
 	for _, table := range tables {
 		_, err := DB.Exec(table)
 		if err != nil {
-			log.Fatal("Error creating table:", err)
+			log.Fatal("❌ Error creating table:", err)
 		}
 	}
+
+	fmt.Println("✅ Tables created or verified successfully")
 }
