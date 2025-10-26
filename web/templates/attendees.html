@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Event Attendees</title>
+</head>
+<body>
+  <h1>Event Attendees</h1>
+  <ul>
+    {{range .}}
+      <li>{{.Name}} — {{.Email}}</li>
+    {{else}}
+      <li>No attendees yet.</li>
+    {{end}}
+  </ul>
+  <a href="/events">← Back to Events</a>
+</body>
+</html>

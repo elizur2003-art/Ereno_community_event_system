@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register Attendee</title>
+</head>
+<body>
+  <h1>Register for an Event</h1>
+  <form method="POST">
+    <label>Name:</label><br>
+    <input type="text" name="name" required><br><br>
+
+    <label>Email:</label><br>
+    <input type="email" name="email" required><br><br>
+
+    <label>Select Event:</label><br>
+    <select name="event_id" required>
+      {{range .}}
+        <option value="{{.ID}}">{{.Name}} ({{.Date}})</option>
+      {{end}}
+    </select><br><br>
+
+    <button type="submit">Register</button>
+  </form>
+</body>
+</html>

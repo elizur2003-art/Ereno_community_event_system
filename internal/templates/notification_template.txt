@@ -1,0 +1,17 @@
+Subject: 🎉 You're Registered for {{.EventName}}!
+
+Hi {{.AttendeeName}},
+
+Thank you for registering for **{{.EventName}}**!
+
+📅 **Date:** {{.EventDate}}
+🕒 **Time:** {{.EventTime}}
+📍 **Venue:** {{.EventVenue}}
+
+We’re excited to have you join us!  
+Please arrive a few minutes early for check-in.
+
+If you have any questions, feel free to reply to this email.
+
+See you there!  
+— The Community Event Team

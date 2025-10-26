@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{.Event.Name}} - Report</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>{{.Event.Name}} Report</h1>
+    <p><b>Date:</b> {{.Event.Date}} | <b>Venue:</b> {{.Event.Venue}}</p>
+    <p><b>Total Attendees:</b> {{.TotalGuests}}</p>
+    <p><b>Average Rating:</b> {{printf "%.2f" .AvgRating}}</p>
+
+    <h2>Feedback</h2>
+    <ul>
+      {{range .Feedbacks}}
+        <li><b>{{.Name}}</b>: {{.Comment}} (⭐ {{.Rating}})</li>
+      {{else}}
+        <li>No feedback yet.</li>
+      {{end}}
+    </ul>
+
+    <h2>Attendees</h2>
+    <ul>
+      {{range .Attendees}}
+        <li>{{.Name}} — {{.Email}}</li>
+      {{else}}
+        <li>No attendees yet.</li>
+      {{end}}
+    </ul>
+
+    <a href="/reports">← Back to Reports</a>
+  </div>
+</body>
+</html>

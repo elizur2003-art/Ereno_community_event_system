@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Community Events</title>
+</head>
+<body>
+  <h1>Community Events</h1>
+  <a href="/template/create">+ Create Event</a>
+  <ul>
+    {{range .}}
+      <li>
+        <b>{{.Name}}</b> — {{.Date}} @ {{.Venue}}<br>
+        {{.Description}}
+      </li>
+    {{else}}
+      <li>No events yet!</li>
+    {{end}}
+  </ul>
+</body>
+</html>

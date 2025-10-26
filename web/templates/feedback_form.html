@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Submit Feedback</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>📝 Event Feedback</h1>
+    <form method="POST" action="/feedback?event_id={{.}}">
+      <label>Name:</label><br>
+      <input type="text" name="name" required><br><br>
+
+      <label>Comment:</label><br>
+      <textarea name="comment" rows="4" cols="40" required></textarea><br><br>
+
+      <label>Rating:</label><br>
+      <select name="rating" required>
+        <option value="5">⭐ 5 - Excellent</option>
+        <option value="4">⭐ 4 - Good</option>
+        <option value="3">⭐ 3 - Average</option>
+        <option value="2">⭐ 2 - Poor</option>
+        <option value="1">⭐ 1 - Bad</option>
+      </select><br><br>
+
+      <button type="submit">Submit Feedback</button>
+    </form>
+  </div>
+</body>
+</html>

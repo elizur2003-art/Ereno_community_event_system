@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Submit Feedback</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Feedback for {{.Name}}</h1>
+    <form method="POST" action="/feedback">
+      <input type="hidden" name="event_id" value="{{.ID}}">
+      <label>Your Name:</label>
+      <input type="text" name="name" required>
+
+      <label>Comment:</label>
+      <textarea name="comment" required></textarea>
+
+      <label>Rating (1-5):</label>
+      <input type="number" name="rating" min="1" max="5" required>
+
+      <button type="submit">Submit Feedback</button>
+    </form>
+  </div>
+</body>
+</html>

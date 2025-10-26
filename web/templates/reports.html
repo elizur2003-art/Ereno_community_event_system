@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Event Reports</title>
+        <link rel="stylesheet" href="/static/style.css">
+    </head> <body> <div class="container">
+        <h1>Event Reports</h1>
+        <ul> {{range .}}
+        <li><a href="/reports?event_id={{.ID}}">{{.Name}} ({{.Date}})</a>
+        </li>{{else}} <li>No events yet.</li> {{end}} </ul>
+    </div> </body></html>

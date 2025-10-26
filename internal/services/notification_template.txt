@@ -1,0 +1,6 @@
+Hello!
+
+{{.Message}}
+
+Thank you,
+Community Event System Team
