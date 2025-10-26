@@ -4,9 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
-	_ "github.com/mattn/go-sqlite3"
 )
 
 var DB *sql.DB
@@ -20,9 +21,24 @@ func LoadEnv() {
 
 func InitDB() {
 	var err error
-	DB, err = sql.Open("sqlite3", "./community.db")
+
+	dbUser := os.Getenv("DB_USER")
+	dbPass := os.Getenv("DB_PASS")
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
+
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
+		dbUser, dbPass, dbHost, dbPort, dbName,
+	)
+
+	DB, err = sql.Open("mysql", dsn)
 	if err != nil {
 		log.Fatal("Error connecting to database:", err)
+	}
+
+	if err = DB.Ping(); err != nil {
+		log.Fatal("Database unreachable:", err)
 	}
 
 	createTables()
@@ -32,28 +48,28 @@ func InitDB() {
 func createTables() {
 	tables := []string{
 		`CREATE TABLE IF NOT EXISTS events (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			name TEXT,
-			date TEXT,
-			time TEXT,
-			venue TEXT,
+			id INT AUTO_INCREMENT PRIMARY KEY,
+			name VARCHAR(255),
+			date VARCHAR(255),
+			time VARCHAR(255),
+			venue VARCHAR(255),
 			description TEXT
 		);`,
 
 		`CREATE TABLE IF NOT EXISTS attendees (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			name TEXT,
-			email TEXT,
-			event_id INTEGER,
+			id INT AUTO_INCREMENT PRIMARY KEY,
+			name VARCHAR(255),
+			email VARCHAR(255),
+			event_id INT,
 			FOREIGN KEY (event_id) REFERENCES events(id)
 		);`,
 
 		`CREATE TABLE IF NOT EXISTS feedback (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			event_id INTEGER,
-			name TEXT,
+			id INT AUTO_INCREMENT PRIMARY KEY,
+			event_id INT,
+			name VARCHAR(255),
 			comment TEXT,
-			rating INTEGER,
+			rating INT,
 			FOREIGN KEY (event_id) REFERENCES events(id)
 		);`,
 	}
